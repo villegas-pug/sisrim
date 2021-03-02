@@ -1,0 +1,78 @@
+version: '3.7'
+services:
+  sisrim:
+    container_name: sisrim
+    image: sisrim:v1
+    ports:
+      - 5000:5000
+    restart: always
+    networks:
+      - rim-network
+    mem_limit: 50m
+    cpus: 0.25
+  config-server:
+    container_name: config-server
+    image: config-server
+    ports: 
+      - 7777:7777
+    restart: always
+    networks: 
+      - rim-network
+    mem_limit: 128m
+    cpus: 0.5
+  eureka-server:
+    container_name: eureka-server
+    image: eureka-server
+    ports: 
+      - 8761:8761
+    restart: always
+    networks: 
+      - rim-network
+    mem_limit: 128m
+    cpus: 0.5
+  microservicio-mysql:
+    container_name: microservicio-mysql
+    image: mysql:8
+    volumes:
+      - backup-db:/var/lib/mysql
+    ports:
+      - 3307:3306
+    restart: always
+    networks:
+      - rim-network
+    environment:
+      - MYSQL_DATABASE=bdsirim
+      - MYSQL_ROOT_PASSWORD=sasa
+    mem_limit: 256m
+    cpus: 0.5
+  microservicio-perfilamiento:
+    container_name: microservicio-perfilamiento
+    image: microservicio-perfilamiento
+    restart: always
+    networks: 
+      - rim-network
+    depends_on: 
+      - config-server
+      - eureka-server
+      - microservicio-mysql
+    mem_limit: 128m
+    cpus: 0.5
+  microservicio-gateway:
+    container_name: microservicio-gateway
+    image: gateway
+    ports: 
+      - 6090:6090
+    restart: always
+    networks: 
+      - rim-network
+    depends_on:
+      - config-server
+      - eureka-server
+      - microservicio-mysql
+      - microservicio-perfilamiento
+    mem_limit: 128m
+    cpus: 0.5
+volumes:
+  backup-db:
+networks: 
+  rim-network:
