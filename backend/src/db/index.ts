@@ -12,6 +12,7 @@ const config: config = {
    port: 1433
 }
 
+console.log(process.env.NAME_DB)
 
 export default async function pool(): Promise<ConnectionPool> {
    try {

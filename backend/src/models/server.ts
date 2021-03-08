@@ -1,7 +1,7 @@
 import express, { Application, json } from 'express'
 import cors from 'cors'
-import routes from '../routes/test.routes'
 
+import routes from '../routes/test.routes'
 export default class Server {
 
    private app: Application

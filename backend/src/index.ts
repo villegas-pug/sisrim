@@ -1,9 +1,13 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'prod'
+process.env.NODE_ENV = 'dev'
 
-import Server from './models/server'
 import dotenv = require('dotenv')
 
+console.log(process.env.NODE_ENV)
+
+
 dotenv.config({ path: `${__dirname}/config/${process.env.NODE_ENV}.env` })
+
+import Server from './models/server'
 
 /*» Initialize  server...  */
 const server = new Server()
